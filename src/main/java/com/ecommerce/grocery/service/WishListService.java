@@ -1,6 +1,7 @@
 package com.ecommerce.grocery.service;
 
 import com.ecommerce.grocery.dto.ProductDto;
+import com.ecommerce.grocery.model.Product;
 import com.ecommerce.grocery.model.User;
 import com.ecommerce.grocery.model.WishList;
 import com.ecommerce.grocery.repository.WishListRepository;
@@ -8,6 +9,7 @@ import org.aspectj.weaver.patterns.IToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,4 +36,14 @@ public class WishListService {
 
         return productDtos;
     }
+
+    @Transactional
+    public void deleteItemFromWishList(Integer productId) {
+        Product product = productService.findById(productId);
+        wishListRepository.deleteByProduct(product);
+    }
+
+//    public Boolean doesProductExist(String token, Integer productId) {
+//
+//    }
 }

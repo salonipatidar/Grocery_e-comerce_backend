@@ -66,11 +66,12 @@ public class UserService {
         User user = userRepository.findByEmail(signInDto.getEmail());
 
         if(Objects.isNull(user))
-            throw new AuthenticationFailedException("User is not Valid");
+            //throw new AuthenticationFailedException("User/Password is not Valid");
+            return new SignInResponseDto("false" , "User/Password is not Valid");
 
         try{
             if(!user.getPassword().equals(hashPassword(signInDto.getPassword())))
-                throw new AuthenticationFailedException("password inCorrect");
+                return new SignInResponseDto("false" , "User/Password is not Valid");
         }catch (NoSuchAlgorithmException e){
             e.printStackTrace();
         }
@@ -81,7 +82,7 @@ public class UserService {
             throw new CustomException("token is not present");
         }
 
-        return new SignInResponseDto("sucess", authenticationToken.getToken());
+        return new SignInResponseDto("success", authenticationToken.getToken());
 
     }
 }

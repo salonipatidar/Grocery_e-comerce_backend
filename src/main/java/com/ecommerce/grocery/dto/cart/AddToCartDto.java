@@ -1,8 +1,11 @@
 package com.ecommerce.grocery.dto.cart;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 public class AddToCartDto {
+
 
     private Integer id;
     private @NotNull Integer productId ;

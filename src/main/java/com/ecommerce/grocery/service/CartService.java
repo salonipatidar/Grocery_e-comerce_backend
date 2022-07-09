@@ -10,6 +10,7 @@ import com.ecommerce.grocery.model.User;
 import com.ecommerce.grocery.repository.CartReposiory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +33,7 @@ public class CartService {
         Cart cart = new Cart();
         cart.setProduct(product);
         cart.setUser(user);
+        cart.setQuantity(addToCartDto.getQuantity());
         cart.setCreatedDate(new Date());
 
         cartReposiory.save(cart);
@@ -45,7 +47,7 @@ public class CartService {
 
     for(Cart cart : cartList){
         CartItemDto cartItemDto = new CartItemDto(cart);
-        totalCost += cartItemDto.getQuantity() * cart.getProduct().getPrice();
+        totalCost += cart.getQuantity() * cart.getProduct().getPrice();
         cartItemDtos.add(cartItemDto);
 
     }
@@ -75,5 +77,22 @@ public class CartService {
         }
 
         cartReposiory.deleteById(cartItemId);
+    }
+
+    public List<Cart> getCartForUser(User user) {
+        List<Cart> cartList = cartReposiory.findAllByUserOrderByCreatedDateDesc(user);
+        return cartList;
+    }
+
+    public void updateCartItem(AddToCartDto cartDto, User user,Product product){
+        Cart cart = cartReposiory.getOne(cartDto.getId());
+        cart.setQuantity(cartDto.getQuantity());
+        cart.setCreatedDate(new Date());
+        cartReposiory.save(cart);
+    }
+
+    @Transactional
+    public void deleteAllItemsByUser(User user) {
+        cartReposiory.deleteAllByUser(user);
     }
 }

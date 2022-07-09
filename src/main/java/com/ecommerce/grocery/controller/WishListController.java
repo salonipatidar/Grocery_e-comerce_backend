@@ -17,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/wishlist")
+@CrossOrigin(origins = "http://localhost:3000")
 public class WishListController {
     @Autowired
     WishListService wishListService ;
@@ -31,12 +32,25 @@ public class WishListController {
         tokenService.authenticate(token);
 //            2: find the user
         User user = tokenService.getUser(token);
+        List<ProductDto> wishListForUser =  wishListService.getWhishListForUser(user);
+
+        Boolean ans = false ;
+
+        for(ProductDto  newproduct: wishListForUser ){
+            if(newproduct.getId() == product.getId()){
+                ans = true ;
+                break;
+            }
+        }
 //            3: Save the item to wishlist
-        WishList wishList = new WishList(user , product);
+        if(!ans) {
+            WishList wishList = new WishList(user, product);
 
-        wishListService.createWishList(wishList);
+            wishListService.createWishList(wishList);
 
-        return new ResponseEntity<>(new ApiResponse(true,"Whislist created") , HttpStatus.CREATED);
+            return new ResponseEntity<>(new ApiResponse(true,"Whislist created") , HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(new ApiResponse(false,"Item already exist in wishlist") , HttpStatus.BAD_REQUEST);
 
     }
 
@@ -55,5 +69,51 @@ public class WishListController {
     }
 
 
+    @GetMapping("/{token}/{productId}")
+    public ResponseEntity<Boolean> isProductInWishList(@PathVariable("token")String token ,@PathVariable("productId") Integer productId){
+
+        tokenService.authenticate(token);
+//            2: find the user
+        User user = tokenService.getUser(token);
+//            3: Show the items in wishlist
+        List<ProductDto> wishListForUser =  wishListService.getWhishListForUser(user);
+
+            Boolean ans = false ;
+
+            for(ProductDto  product: wishListForUser ){
+                if(product.getId() == productId){
+                    ans = true ;
+                    break;
+                }
+            }
+
+
+        return new ResponseEntity<Boolean>(ans , HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{token}/{productId}")
+    public ResponseEntity<ApiResponse> deleteFromWishList(@PathVariable("token")String token ,@PathVariable("productId") Integer productId){
+        tokenService.authenticate(token);
+//            2: find the user
+        User user = tokenService.getUser(token);
+//            3: Show the items in wishlist
+        List<ProductDto> wishListForUser =  wishListService.getWhishListForUser(user);
+
+        Boolean ans = false ;
+
+        for(ProductDto  product: wishListForUser ){
+            if(product.getId() == productId){
+                ans = true ;
+                break;
+            }
+        }
+
+        if(ans){
+            wishListService.deleteItemFromWishList(productId);
+            return  new ResponseEntity<>(new ApiResponse(true ,"product deleted from wishlist"), HttpStatus.OK);
+        }
+        return  new ResponseEntity<>(new ApiResponse(false ,"product does not exist in wishlist"), HttpStatus.OK);
+
+    }
 
 }

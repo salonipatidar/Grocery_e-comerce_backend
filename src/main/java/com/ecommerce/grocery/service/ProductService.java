@@ -45,8 +45,8 @@ public class ProductService {
         return productDto;
     }
 
-    public List<ProductDto> getAllProducts() {
-        List<Product> allProducts = productRepository.findAll();
+    public List<ProductDto> getAllProducts(Integer categoryId) {
+        List<Product> allProducts = productRepository.findAllByCategoryId(categoryId);
 
         List<ProductDto>  productDtos = new ArrayList<>();
         for(Product product : allProducts)
@@ -82,5 +82,11 @@ public class ProductService {
         if(optionalProduct.isEmpty())
             throw  new ProductNotExistsException("Product id is invalid" + productId);
         return optionalProduct.get();
+    }
+
+    public ProductDto getProduct(Integer productId) {
+
+       Product product = findById(productId);
+        return getProductDto(product);
     }
 }

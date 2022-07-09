@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/product")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ProductController {
 
     @Autowired
@@ -34,10 +35,16 @@ public class ProductController {
         return  new ResponseEntity<ApiResponse>(new ApiResponse(true,"Product created") ,HttpStatus.CREATED);
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<ProductDto>> getProducts(){
-        List<ProductDto>  products = productService.getAllProducts();
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<List<ProductDto>> getProducts(@PathVariable("categoryId") Integer categoryId){
+        List<ProductDto>  products = productService.getAllProducts(categoryId);
         return  new ResponseEntity<>(products,HttpStatus.OK);
+    }
+
+    @GetMapping("/details/{productId}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable("productId") Integer productId){
+        ProductDto  product = productService.getProduct(productId);
+        return  new ResponseEntity<>(product,HttpStatus.OK);
     }
 
     @PostMapping("/update/{productId}")
