@@ -79,7 +79,7 @@ public class ProductService {
     public Product findById(Integer productId) throws ProductNotExistsException{
         Optional<Product> optionalProduct = productRepository.findById(productId);
 
-        if(optionalProduct.isEmpty())
+        if(optionalProduct== null)
             throw  new ProductNotExistsException("Product id is invalid" + productId);
         return optionalProduct.get();
     }

@@ -1,5 +1,4 @@
 package com.ecommerce.grocery.model;
-import javax.annotation.processing.Generated;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
