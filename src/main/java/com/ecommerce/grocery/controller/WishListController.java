@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/wishlist")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://salonipatidar.github.io/Grocery_e-commerce_frontend")
 public class WishListController {
     @Autowired
     WishListService wishListService ;

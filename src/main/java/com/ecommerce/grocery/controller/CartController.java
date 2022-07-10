@@ -23,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cart")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://salonipatidar.github.io/Grocery_e-commerce_frontend")
 public class CartController {
 
     @Autowired

@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/order")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://salonipatidar.github.io/Grocery_e-commerce_frontend")
 public class OrderController {
 
     @Autowired

@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/category")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://salonipatidar.github.io/Grocery_e-commerce_frontend")
 public class CategoryController {
 
     @Autowired
