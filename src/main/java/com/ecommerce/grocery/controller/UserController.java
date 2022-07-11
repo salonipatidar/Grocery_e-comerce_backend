@@ -8,6 +8,8 @@ import com.ecommerce.grocery.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RequestMapping("/user")
 @RestController
 @CrossOrigin(origins = "https://salonipatidar.github.io/Grocery_e-commerce_frontend")
@@ -21,6 +23,10 @@ public class UserController {
         return userService.signUp(signupDto);
     }
 
+    @ModelAttribute
+    public void setResponseHeader(HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+    }
 
     @PostMapping("/signin")
     public SignInResponseDto signIn(@RequestBody SignInDto signInDto){

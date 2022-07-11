@@ -4,11 +4,11 @@ import com.ecommerce.grocery.common.ApiResponse;
 import com.ecommerce.grocery.model.Category;
 import com.ecommerce.grocery.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -20,13 +20,15 @@ public class CategoryController {
     CategoryService categoryService ;
 
 
+    @ModelAttribute
+    public void setResponseHeader(HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+    }
 
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createCategory(@RequestBody Category category){
         categoryService.createCategory(category);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CACHE_CONTROL, "no-cache");
-        return new ResponseEntity<>(new ApiResponse(true, "Category created"),headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse(true, "Category created"), HttpStatus.CREATED);
     }
 
     @GetMapping("/list")
@@ -36,31 +38,28 @@ public class CategoryController {
 
     @PostMapping("/update/{categoryId}")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable("categoryId") Integer categoryId , @RequestBody Category category){
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CACHE_CONTROL, "no-cache");
+
         if(!categoryService.findById(categoryId)){
 
-            return new ResponseEntity<>(new ApiResponse(false, "category does not exist"),headers, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse(false, "category does not exist"), HttpStatus.NOT_FOUND);
 
         }
 
         categoryService.updateCategory(categoryId , category);
 
-        return new ResponseEntity<>(new ApiResponse(true, "category updated"),headers, HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true, "category updated"), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{categoryId}")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable("categoryId") Integer categoryId ){
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CACHE_CONTROL, "no-cache");
         if(!categoryService.findById(categoryId)){
-            return new ResponseEntity<>(new ApiResponse(false, "category does not exist"),headers, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse(false, "category does not exist"), HttpStatus.NOT_FOUND);
 
         }
 
         categoryService.deleteCategory(categoryId);
 
-        return new ResponseEntity<>(new ApiResponse(true, "category deleted"),headers, HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true, "category deleted"), HttpStatus.OK);
 
     }
 }
