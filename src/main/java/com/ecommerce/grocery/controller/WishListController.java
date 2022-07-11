@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/wishlist")
-@CrossOrigin(origins = "https://salonipatidar.github.io/Grocery_e-commerce_frontend")
+@CrossOrigin(origins = "https://salonipatidar.github.io")
 public class WishListController {
     @Autowired
     WishListService wishListService ;
@@ -27,7 +27,7 @@ public class WishListController {
 
     @ModelAttribute
     public void setResponseHeader(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "https://salonipatidar.github.io/Grocery_e-commerce_frontend");
+        response.setHeader("Access-Control-Allow-Origin", "https://salonipatidar.github.io");
     }
 
   //save product as wishlist item

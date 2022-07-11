@@ -24,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cart")
-@CrossOrigin(origins = "https://salonipatidar.github.io/Grocery_e-commerce_frontend")
+@CrossOrigin(origins = "https://salonipatidar.github.io")
 public class CartController {
 
     @Autowired
@@ -41,7 +41,7 @@ public class CartController {
 
     @ModelAttribute
     public void setResponseHeader(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "https://salonipatidar.github.io/Grocery_e-commerce_frontend");
+        response.setHeader("Access-Control-Allow-Origin", "https://salonipatidar.github.io");
     }
 
 

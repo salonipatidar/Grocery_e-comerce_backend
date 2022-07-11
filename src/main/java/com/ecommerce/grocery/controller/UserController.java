@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RequestMapping("/user")
 @RestController
-@CrossOrigin(origins = "https://salonipatidar.github.io/Grocery_e-commerce_frontend")
+@CrossOrigin(origins = "https://salonipatidar.github.io")
 public class UserController {
 
     @Autowired
@@ -25,7 +25,7 @@ public class UserController {
 
     @ModelAttribute
     public void setResponseHeader(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "https://salonipatidar.github.io/Grocery_e-commerce_frontend");
+        response.setHeader("Access-Control-Allow-Origin", "https://salonipatidar.github.io");
     }
 
     @PostMapping("/signin")
