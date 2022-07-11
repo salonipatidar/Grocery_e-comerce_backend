@@ -27,7 +27,7 @@ public class ProductController {
 
     @ModelAttribute
     public void setResponseHeader(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Origin", "https://salonipatidar.github.io/Grocery_e-commerce_frontend");
     }
 
 

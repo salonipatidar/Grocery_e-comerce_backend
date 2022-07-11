@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -37,6 +38,11 @@ public class CartController {
 
     @Autowired
     ProductService productService ;
+
+    @ModelAttribute
+    public void setResponseHeader(HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "https://salonipatidar.github.io/Grocery_e-commerce_frontend");
+    }
 
 
     @PostMapping("/add")
