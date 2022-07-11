@@ -10,6 +10,7 @@ import com.ecommerce.grocery.model.AuthenticationToken;
 import com.ecommerce.grocery.model.User;
 import com.ecommerce.grocery.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -26,6 +27,8 @@ public class UserService {
 
     @Autowired
     TokenService tokenService;
+
+
 
     @Transactional
     public ResponseDto signUp(SignupDto signupDto) {

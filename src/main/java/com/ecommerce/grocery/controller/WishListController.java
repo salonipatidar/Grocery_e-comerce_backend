@@ -9,6 +9,7 @@ import com.ecommerce.grocery.service.TokenService;
 import com.ecommerce.grocery.service.WishListService;
 import org.aspectj.weaver.patterns.IToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,8 @@ public class WishListController {
     @Autowired
     TokenService tokenService;
 
+
+
   //save product as wishlist item
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addToWishList(@RequestBody Product product , @RequestParam("token") String token){
@@ -32,6 +35,7 @@ public class WishListController {
         tokenService.authenticate(token);
 //            2: find the user
         User user = tokenService.getUser(token);
+
         List<ProductDto> wishListForUser =  wishListService.getWhishListForUser(user);
 
         Boolean ans = false ;
@@ -42,15 +46,17 @@ public class WishListController {
                 break;
             }
         }
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CACHE_CONTROL, "no-cache");
 //            3: Save the item to wishlist
         if(!ans) {
             WishList wishList = new WishList(user, product);
 
             wishListService.createWishList(wishList);
 
-            return new ResponseEntity<>(new ApiResponse(true,"Whislist created") , HttpStatus.CREATED);
+            return new ResponseEntity<>(new ApiResponse(true,"Whislist created") ,headers, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(new ApiResponse(false,"Item already exist in wishlist") , HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ApiResponse(false,"Item already exist in wishlist"),headers , HttpStatus.BAD_REQUEST);
 
     }
 
@@ -64,8 +70,9 @@ public class WishListController {
         User user = tokenService.getUser(token);
 //            3: Show the items in wishlist
         List<ProductDto> wishListForUser =  wishListService.getWhishListForUser(user);
-
-        return new ResponseEntity<>(wishListForUser , HttpStatus.OK);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CACHE_CONTROL, "no-cache");
+        return new ResponseEntity<>(wishListForUser,headers , HttpStatus.OK);
     }
 
 
@@ -86,9 +93,9 @@ public class WishListController {
                     break;
                 }
             }
-
-
-        return new ResponseEntity<Boolean>(ans , HttpStatus.OK);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CACHE_CONTROL, "no-cache");
+        return new ResponseEntity<Boolean>(ans,headers , HttpStatus.OK);
     }
 
     @DeleteMapping("/{token}/{productId}")
@@ -107,12 +114,14 @@ public class WishListController {
                 break;
             }
         }
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CACHE_CONTROL, "no-cache");
 
         if(ans){
             wishListService.deleteItemFromWishList(productId);
-            return  new ResponseEntity<>(new ApiResponse(true ,"product deleted from wishlist"), HttpStatus.OK);
+            return  new ResponseEntity<>(new ApiResponse(true ,"product deleted from wishlist"),headers, HttpStatus.OK);
         }
-        return  new ResponseEntity<>(new ApiResponse(false ,"product does not exist in wishlist"), HttpStatus.OK);
+        return  new ResponseEntity<>(new ApiResponse(false ,"product does not exist in wishlist"),headers, HttpStatus.OK);
 
     }
 

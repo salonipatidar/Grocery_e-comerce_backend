@@ -14,6 +14,7 @@ import com.ecommerce.grocery.service.CartService;
 import com.ecommerce.grocery.service.ProductService;
 import com.ecommerce.grocery.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,7 @@ public class CartController {
     @Autowired
     ProductService productService ;
 
+
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addToCart(@RequestBody AddToCartDto addToCartDto, @RequestParam("token") String token){
         //     1 :authenticate the Token
@@ -50,12 +52,14 @@ public class CartController {
 
         List<Cart> cart = cartService.getCartForUser(user);
 
+        HttpHeaders headers = new HttpHeaders();
 
+        headers.add(HttpHeaders.CACHE_CONTROL, "no-cache");
 
         for (Cart item : cart){
             if(addToCartDto.getProductId() == item.getProduct().getId())
             {
-                return new ResponseEntity<>(new ApiResponse(false,"Item already in cart") , HttpStatus.OK);
+                return new ResponseEntity<>(new ApiResponse(false,"Item already in cart"),headers , HttpStatus.OK );
 
             }
         }
@@ -63,7 +67,7 @@ public class CartController {
 
         cartService.addToCart(addToCartDto , user);
 
-        return new ResponseEntity<>(new ApiResponse(true,"added to cart") , HttpStatus.CREATED);
+        return new ResponseEntity<>(new ApiResponse(true,"added to cart"),headers , HttpStatus.CREATED);
     }
 
     @GetMapping("/")
@@ -74,7 +78,9 @@ public class CartController {
 
         CartDto cartDto = cartService.listCartItems(user);
 
-        return new ResponseEntity<>(cartDto,HttpStatus.OK);
+//        headers.add(HttpHeaders.CACHE_CONTROL, "no-cache");
+
+        return new ResponseEntity<>(cartDto,HttpStatus.OK );
     }
 
     @DeleteMapping("/delete/{cartItemId}")
@@ -83,8 +89,10 @@ public class CartController {
         User user = tokenService.getUser(token);
 
         cartService.deleteCartItem(cartItemId , user);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CACHE_CONTROL, "no-cache");
 
-        return new ResponseEntity<>(new ApiResponse(true , "Item deleted from cart") , HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true , "Item deleted from cart") ,headers, HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteAll")
@@ -93,8 +101,10 @@ public class CartController {
         User user = tokenService.getUser(token);
 
         cartService.deleteAllItemsByUser(user);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CACHE_CONTROL, "no-cache");
 
-        return new ResponseEntity<>(new ApiResponse(true , "Items deleted from cart") , HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true , "Items deleted from cart"),headers , HttpStatus.OK);
     }
     @PutMapping("/update/{cartItemId}")
     public ResponseEntity<ApiResponse> updateCartItem(@RequestBody @Valid AddToCartDto cartDto,
@@ -103,6 +113,8 @@ public class CartController {
         User user = tokenService.getUser(token);
         Product product = productService.findById(cartDto.getProductId());
         cartService.updateCartItem(cartDto, user,product);
-        return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Product has been updated"), HttpStatus.OK);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CACHE_CONTROL, "no-cache");
+        return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Product has been updated"), headers, HttpStatus.OK);
     }
 }
