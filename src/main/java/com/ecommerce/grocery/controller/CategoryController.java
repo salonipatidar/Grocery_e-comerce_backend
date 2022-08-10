@@ -13,17 +13,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/category")
-@CrossOrigin(origins = "https://salonipatidar.github.io")
+@CrossOrigin(origins = "*")
 public class CategoryController {
 
     @Autowired
     CategoryService categoryService ;
 
 
-    @ModelAttribute
-    public void setResponseHeader(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "https://salonipatidar.github.io");
-    }
+//    @ModelAttribute
+//    public void setResponseHeader(HttpServletResponse response) {
+//        response.setHeader("Access-Control-Allow-Origin", "*");
+//    }
 
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createCategory(@RequestBody Category category){

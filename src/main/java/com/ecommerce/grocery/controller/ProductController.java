@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/product")
-@CrossOrigin(origins = "https://salonipatidar.github.io")
+@CrossOrigin(origins = {"http://localhost:3000" , "https://salonipatidar.github.io" , "https://arpit194.github.io"})
 public class ProductController {
 
     @Autowired
@@ -25,10 +25,10 @@ public class ProductController {
     @Autowired
     CategoryRepo categoryRepo;
 
-    @ModelAttribute
-    public void setResponseHeader(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "https://salonipatidar.github.io");
-    }
+//    @ModelAttribute
+//    public void setResponseHeader(HttpServletResponse response) {
+//        response.setHeader("Access-Control-Allow-Origin", "*");
+//    }
 
 
     @PostMapping("/add")

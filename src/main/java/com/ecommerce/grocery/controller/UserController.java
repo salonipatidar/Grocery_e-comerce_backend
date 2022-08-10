@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RequestMapping("/user")
 @RestController
-@CrossOrigin(origins = "https://salonipatidar.github.io")
+@CrossOrigin(origins = {"http://localhost:3000" , "https://salonipatidar.github.io" , "https://arpit194.github.io"})
 public class UserController {
 
     @Autowired
@@ -23,10 +23,10 @@ public class UserController {
         return userService.signUp(signupDto);
     }
 
-    @ModelAttribute
-    public void setResponseHeader(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "https://salonipatidar.github.io");
-    }
+//    @ModelAttribute
+//    public void setResponseHeader(HttpServletResponse response) {
+//        response.setHeader("Access-Control-Allow-Origin", "*");
+//    }
 
     @PostMapping("/signin")
     public SignInResponseDto signIn(@RequestBody SignInDto signInDto){
