@@ -1,6 +1,7 @@
 package com.ecommerce.grocery.controller;
 
 import com.ecommerce.grocery.common.ApiResponse;
+import com.ecommerce.grocery.common.CartResponse;
 import com.ecommerce.grocery.dto.cart.AddToCartDto;
 import com.ecommerce.grocery.dto.cart.CartDto;
 import com.ecommerce.grocery.dto.cart.CartItemDto;
@@ -46,7 +47,7 @@ public class CartController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addToCart(@RequestBody AddToCartDto addToCartDto, @RequestParam("token") String token){
+    public ResponseEntity<CartResponse> addToCart(@RequestBody AddToCartDto addToCartDto, @RequestParam("token") String token){
         //     1 :authenticate the Token
         tokenService.authenticate(token);
 //            2: find the user
@@ -62,15 +63,15 @@ public class CartController {
         for (Cart item : cart){
             if(addToCartDto.getProductId() == item.getProduct().getId())
             {
-                return new ResponseEntity<>(new ApiResponse(false,"Item already in cart"), HttpStatus.OK );
+                return new ResponseEntity<>(new CartResponse(false,"Item already in cart" , -1), HttpStatus.OK );
 
             }
         }
 
 
-        cartService.addToCart(addToCartDto , user);
+        Integer cartId = cartService.addToCart(addToCartDto , user);
 
-        return new ResponseEntity<>(new ApiResponse(true,"added to cart"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new CartResponse(true,"added to cart",cartId), HttpStatus.CREATED);
     }
 
     @GetMapping("/")

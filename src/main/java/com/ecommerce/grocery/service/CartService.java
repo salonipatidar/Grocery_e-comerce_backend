@@ -26,7 +26,7 @@ public class CartService {
     @Autowired
     CartReposiory cartReposiory;
 
-    public void addToCart(AddToCartDto addToCartDto, User user) {
+    public Integer addToCart(AddToCartDto addToCartDto, User user) {
         //validate product id is valid or not
        Product product =  productService.findById(addToCartDto.getProductId());
         // save to cart
@@ -36,7 +36,9 @@ public class CartService {
         cart.setQuantity(addToCartDto.getQuantity());
         cart.setCreatedDate(new Date());
 
-        cartReposiory.save(cart);
+        Cart cart1 = cartReposiory.save(cart);
+
+        return cart1.getId();
     }
 
     public CartDto listCartItems(User user) {
